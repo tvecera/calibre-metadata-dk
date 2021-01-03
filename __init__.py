@@ -23,7 +23,7 @@ class DatabazeKnihCZ(Source):
     description = "Downloads metadata and covers from databazeknih.cz based on title and author"
     supported_platforms = ["windows", "osx", "linux"]
     author = "Tomas Vecera <tomas@vecera.dev>"
-    version = (0, 9, 1)
+    version = (0, 9, 2)
     minimum_calibre_version = (5, 0, 1)
 
     capabilities = frozenset(["identify", "cover"])
@@ -40,7 +40,7 @@ class DatabazeKnihCZ(Source):
 
     ID_NAME = "databazeknih"
     BASE_URL = "https://www.databazeknih.cz/"
-    GOOGLE_BASE_URL = "https://www.google.com/search?q=site:databazeknih.cz "
+    GOOGLE_BASE_URL = "https://www.google.cz/search?q=site:databazeknih.cz/knihy%20"
 
     def config_widget(self):
         """
@@ -91,7 +91,7 @@ class DatabazeKnihCZ(Source):
             if title and authors:
                 search_author = authors[0].replace(" ", "+")
                 # Get matches for title + author
-                google_url = "%s+%s" % (search_author, search_title)
+                google_url = "%s+%s" % (search_title, search_author)
 
             # Remove multiple "+" from Google search query
             google_url = quote(re.sub(r"\+{2,}", "+", google_url).encode("utf8"))
