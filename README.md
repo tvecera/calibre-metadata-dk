@@ -14,11 +14,24 @@
 * Calibre min. verze 5.0.1
 * plugin byl testován pouze na Windows 10 / Calibre
 
-### Instalace:
+## Instalace:
 1. Spusťte Calibre
 1. Přejděte na „Předvolby“ -> „Moduly“ a klikněte na tlačítko „Načíst modul ze souboru“.
 1. Vyhledejte soubor s pluginem (databazeknihcz-vx_x_x.zip) a klikněte na tlačítko „Instalovat“.
 1. Restartujte Calibre
+
+## Verze
+
+### v0.9.2
+* oprava vyhledávání knihy přes Google Search
+* kniha s identifikátorem z databazeknih se již nevyhledává přes google search
+* ověření funkčnosti na verzi 5.9.0
+
+### v0.9.1
+* první veřejná verze
+
+## Známé problémy
+* stahování velkého množství metadat - především přes hromadné stažení může skončit na HTTP error 429: too many requests - zablokování vyhledávání přes google z Calibre na několik hodin
 
 ## Další rozvoj:
 * testy na dalších platformách (linux, macos)

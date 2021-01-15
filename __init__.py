@@ -72,6 +72,8 @@ class DatabazeKnihCZ(Source):
 
         # Create matches lists
         matches = []
+        # Initialize browser object
+        br = self.browser
 
         book_id = identifiers.get("databazeknih", None)
         log.info("Matching with DK ID: %s" % book_id)
@@ -79,31 +81,28 @@ class DatabazeKnihCZ(Source):
             databazeknih_url = DatabazeKnihCZ.BASE_URL + "knihy/" + book_id
             log.info("Found DK URL: %s" % databazeknih_url)
             matches.append(databazeknih_url)
+        else:
+            log.info("Google - matching with Title: %s & Author(s): %s" % (title, authors))
+            if title:
+                # Get matches for only title
+                search_title = title.replace(" ", "+").replace("-", "+")
+                google_url = "%s" % search_title
+                if title and authors:
+                    search_author = authors[0].replace(" ", "+")
+                    # Get matches for title + author
+                    google_url = "%s+%s" % (search_title, search_author)
 
-        # Initialize browser object
-        br = self.browser
+                # Remove multiple "+" from Google search query
+                google_url = quote(re.sub(r"\+{2,}", "+", google_url).encode("utf8"))
+                google_url = "%s%s" % (DatabazeKnihCZ.GOOGLE_BASE_URL, google_url)
+                log.info("Google search URL: %r" % google_url)
+                google_raw = br.open_novisit(google_url, timeout=timeout).read().strip()
+                google_root = parse(google_raw)
+                google_nodes = google_root.xpath("(//div[@class='g'])//a/@href")
 
-        log.info("Google - matching with Title: %s & Author(s): %s" % (title, authors))
-        if title:
-            # Get matches for only title
-            search_title = title.replace(" ", "+").replace("-", "+")
-            google_url = "%s" % search_title
-            if title and authors:
-                search_author = authors[0].replace(" ", "+")
-                # Get matches for title + author
-                google_url = "%s+%s" % (search_title, search_author)
-
-            # Remove multiple "+" from Google search query
-            google_url = quote(re.sub(r"\+{2,}", "+", google_url).encode("utf8"))
-            google_url = "%s%s" % (DatabazeKnihCZ.GOOGLE_BASE_URL, google_url)
-            log.info("Google search URL: %r" % google_url)
-            google_raw = br.open_novisit(google_url, timeout=timeout).read().strip()
-            google_root = parse(google_raw)
-            google_nodes = google_root.xpath("(//div[@class='g'])//a/@href")
-
-            for url in google_nodes[:2]:
-                if url != "#":
-                    matches.append(url)
+                for url in google_nodes[:2]:
+                    if url != "#":
+                        matches.append(url)
 
         # Return if no Title
         if abort.is_set():
