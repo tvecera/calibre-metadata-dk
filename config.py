@@ -10,8 +10,7 @@ __license__ = 'GPL v3'
 __copyright__ = '2021, Tomas Vecera <tomas@vecera.dev>'
 __docformat__ = 'restructuredtext cs'
 
-from PyQt5 import Qt as QtGui
-from PyQt5.Qt import QLabel, QGridLayout, Qt, QGroupBox, QCheckBox
+from qt.core import QLabel, QGridLayout, Qt, QGroupBox, QCheckBox
 
 STORE_NAME = 'Options'
 
@@ -58,7 +57,7 @@ class ConfigWidget(DefaultConfigWidget):
                                       )
         other_group_box_layout.addWidget(parse_series_label, index, 0, 1, 1)
 
-        self.parse_series_checkbox = QtGui.QCheckBox(self)
+        self.parse_series_checkbox = QCheckBox(self)
         self.parse_series_checkbox.setChecked(c.get(KEY_PARSE_SERIES, DEFAULT_STORE_VALUES[KEY_PARSE_SERIES]))
         other_group_box_layout.addWidget(self.parse_series_checkbox, index, 1, 1, 1)
         index += 1
@@ -70,7 +69,7 @@ class ConfigWidget(DefaultConfigWidget):
                                         )
         other_group_box_layout.addWidget(parse_comments_label, index, 0, 1, 1)
 
-        self.parse_comments_checkbox = QtGui.QCheckBox(self)
+        self.parse_comments_checkbox = QCheckBox(self)
         self.parse_comments_checkbox.setChecked(c.get(KEY_PARSE_COMMENTS, DEFAULT_STORE_VALUES[KEY_PARSE_COMMENTS]))
         other_group_box_layout.addWidget(self.parse_comments_checkbox, index, 1, 1, 1)
         index += 1
@@ -81,7 +80,7 @@ class ConfigWidget(DefaultConfigWidget):
                                       )
         other_group_box_layout.addWidget(parse_rating_label, index, 0, 1, 1)
 
-        self.parse_rating_checkbox = QtGui.QCheckBox(self)
+        self.parse_rating_checkbox = QCheckBox(self)
         self.parse_rating_checkbox.setChecked(c.get(KEY_PARSE_RATING, DEFAULT_STORE_VALUES[KEY_PARSE_RATING]))
         other_group_box_layout.addWidget(self.parse_rating_checkbox, index, 1, 1, 1)
         index += 1
@@ -93,7 +92,7 @@ class ConfigWidget(DefaultConfigWidget):
                                              )
         other_group_box_layout.addWidget(add_databazeknih_id_label, index, 0, 1, 1)
 
-        self.add_databazeknih_id_checkbox = QtGui.QCheckBox(self)
+        self.add_databazeknih_id_checkbox = QCheckBox(self)
         self.add_databazeknih_id_checkbox.setChecked(
             c.get(KEY_ADD_DATABAZEKNIH_ID, DEFAULT_STORE_VALUES[KEY_ADD_DATABAZEKNIH_ID]))
         other_group_box_layout.addWidget(self.add_databazeknih_id_checkbox, index, 1, 1, 1)
@@ -106,7 +105,7 @@ class ConfigWidget(DefaultConfigWidget):
                                         )
         other_group_box_layout.addWidget(verbose_loging_label, index, 0, 1, 1)
 
-        self.verbose_loging_label_checkbox = QtGui.QCheckBox(self)
+        self.verbose_loging_label_checkbox = QCheckBox(self)
         self.verbose_loging_label_checkbox.setChecked(
             c.get(KEY_VERBOSE_LOGGING, DEFAULT_STORE_VALUES[KEY_VERBOSE_LOGGING]))
         other_group_box_layout.addWidget(self.verbose_loging_label_checkbox, index, 1, 1, 1)

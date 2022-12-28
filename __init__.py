@@ -23,8 +23,8 @@ class DatabazeKnihCZ(Source):
     description = "Downloads metadata and covers from databazeknih.cz based on title and author"
     supported_platforms = ["windows", "osx", "linux"]
     author = "Tomas Vecera <tomas@vecera.dev>"
-    version = (0, 9, 2)
-    minimum_calibre_version = (5, 0, 1)
+    version = (0, 9, 3)
+    minimum_calibre_version = (6, 10, 0)
 
     capabilities = frozenset(["identify", "cover"])
     touched_fields = frozenset(
@@ -98,11 +98,13 @@ class DatabazeKnihCZ(Source):
                 log.info("Google search URL: %r" % google_url)
                 google_raw = br.open_novisit(google_url, timeout=timeout).read().strip()
                 google_root = parse(google_raw)
-                google_nodes = google_root.xpath("(//div[@class='g'])//a/@href")
+                google_nodes = google_root.xpath("(//div[contains(@class, 'g')])//a/@href")
 
-                for url in google_nodes[:2]:
-                    if url != "#":
+                for url in google_nodes:
+                    if url != "#" and url.startswith("https://www.databazeknih.cz"):
+                        log.info("Found URL: %r" % url)
                         matches.append(url)
+                        break
 
         # Return if no Title
         if abort.is_set():

@@ -11,9 +11,10 @@ import socket
 from datetime import datetime
 from threading import Thread
 
+from calibre.utils.date import parse_date
 from calibre.ebooks.metadata import check_isbn
 from calibre.ebooks.metadata.book.base import Metadata
-from calibre.library.comments import sanitize_comments_html
+from calibre.library.comments import comments_to_html
 from lxml import etree
 
 
@@ -120,7 +121,7 @@ class Worker(Thread):
         """
         """
         try:
-            more_info_node = root.xpath("//tr[@id='abinfo']/@bid")
+            more_info_node = root.xpath("//span[@id='abinfo']/@bid")
             self.log.info("        Book bid: %s" % more_info_node)
             more_info_url = "https://www.databazeknih.cz/books/book-detail-more-info-ajax.php?bid=" + str(
                 more_info_node[0])
@@ -250,7 +251,7 @@ class Worker(Thread):
             self.log.info("        Comments node: %s" % comments_node)
 
             if comments_node:
-                mi.comments = self.comments = sanitize_comments_html("".join(comments_node))
+                mi.comments = self.comments = comments_to_html("\r\n".join(comments_node))
             self.log.info("        Parsed comments: %s" % mi.comments)
         except:
             self.log.exception("Error parsing comments for url: %r" % self.url)
@@ -276,7 +277,7 @@ class Worker(Thread):
             self.log.info("        DatePublished node: %s" % datepublished_node)
 
             if datepublished_node:
-                mi.pubdate = self.pubdate = datetime.strptime(f"01-01-{datepublished_node[0]}", "%d-%m-%Y")
+                mi.pubdate = self.pubdate = parse_date(datepublished_node[0], assume_utc=True)
             self.log.info("        Parsed pubdate: %s" % mi.pubdate)
         except:
             self.log.exception("Error parsing pubdate for url: %r" % self.url)
@@ -346,7 +347,7 @@ class Worker(Thread):
         """
         try:
             if self.more_info:
-                language_node = root.xpath("//td[@itemprop='language']/text()")
+                language_node = root.xpath("//span[@itemprop='language']/text()")
                 self.log.info("        Language node: %s" % language_node)
                 if language_node:
                     language = u"".join(language_node[0])
